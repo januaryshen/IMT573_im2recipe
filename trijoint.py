@@ -62,7 +62,8 @@ class ingRNN(nn.Module):
         super(ingRNN, self).__init__()
         self.irnn = nn.LSTM(input_size=opts.ingrW2VDim, hidden_size=opts.irnnDim, bidirectional=True, batch_first=True)
         _, vec = torchwordemb.load_word2vec_bin(opts.ingrW2V)
-        self.embs = nn.Embedding(vec.size(0), opts.ingrW2VDim, padding_idx=0) # not sure about the padding idx 
+        print(opts.ingrW2V)
+        self.embs = nn.Embedding( opts.ingrW2VDim,vec.size(0), padding_idx=0) # not sure about the padding idx Jan change ingrW2VDim to ingrW2V
         self.embs.weight.data.copy_(vec)
 
     def forward(self, x, sq_lengths):

@@ -164,20 +164,29 @@ def train(train_loader, model, criterion, optimizer, epoch):
 
     end = time.time()
     for i, (input, target) in enumerate(train_loader):
-
+        print("start sign (Jan)") #Jan added
         # measure data loading time
         data_time.update(time.time() - end)
 
         input_var = list() 
         for j in range(len(input)):
             # if j>1:
-            input_var.append(input[j].to(device))
+            print(j, input[j]) #Jan added
+            if input[j].nelement == 0: #Jan added
+                print("Jan said no tensor input 1")
+                continue
+            else:
+                input_var.append(input[j].to(device))
             # else:
                 # input_var.append(input[j].to(device))
 
         target_var = list()
         for j in range(len(target)):
-            target_var.append(target[j].to(device))
+            if input[j].nelement == 0: #Jan added
+                print("Jan said No tensor target")
+                continue
+            else:
+                target_var.append(target[j].to(device))
 
         # compute output
         output = model(input_var[0], input_var[1], input_var[2], input_var[3], input_var[4])

@@ -28,8 +28,7 @@ class ImagerLoader(data.Dataset):
         else:
             self.partition = partition
 
-        self.env = lmdb.open(os.path.join(data_path, partition + '_lmdb'), max_readers=1, readonly=True, lock=False,
-                             readahead=False, meminit=False)
+        self.env = lmdb.open(os.path.join(data_path,partition + '_lmdb') , max_readers=1, readonly=True, lock=False,readahead=True, meminit=False) #readahead = False
 
         with open(os.path.join(data_path, partition + '_keys.pkl'), 'rb') as f:
             self.ids = pickle.load(f)
@@ -69,12 +68,15 @@ class ImagerLoader(data.Dataset):
         if target == 1:
             if self.partition == 'train':
                 # We do only use the first five images per recipe during training
-                imgIdx = np.random.choice(range(min(5, len(imgs))))
+                #imgIdx = np.random.choice(range(min(5, len(imgs))))
+                imgIdx = 0 #Jan: I only downloaded the 0 dataset
             else:
                 imgIdx = 0
-
-            loader_path = [imgs[imgIdx]['id'][i] for i in range(4)]
+                print(imgIdx) #Jan added
+            loader_path = [imgs[imgIdx]['id'][i] for i in range(1)] # Jan: was range(4)
+            print("a", loader_path) #Jan added
             loader_path = os.path.join(*loader_path)
+            print("b", loader_path) #Jan added
             # path = os.path.join(self.imgPath, self.partition, loader_path, imgs[imgIdx]['id'])
             path = os.path.join(self.imgPath, loader_path, imgs[imgIdx]['id'])
         else:
@@ -92,11 +94,12 @@ class ImagerLoader(data.Dataset):
 
             if self.partition == 'train':  # if training we pick a random image
                 # We do only use the first five images per recipe during training
-                imgIdx = np.random.choice(range(min(5, len(rndimgs))))
+                #imgIdx = np.random.choice(range(min(5, len(rndimgs))))
+                imgIdx = 0 # I only downloaded the zero dataset
             else:
                 imgIdx = 0
 
-            loader_path = [rndimgs[imgIdx]['id'][i] for i in range(4)]
+            loader_path = [rndimgs[imgIdx]['id'][i] for i in range(1)] #Jan: was range(4)
             loader_path = os.path.join(*loader_path)
             path = os.path.join(self.imgPath, loader_path, imgs[imgIdx]['id'])
             # path = self.imgPath + rndimgs[imgIdx]['id']

@@ -21,17 +21,15 @@ maxNumImgs = 5
 
 def get_st(file):
     info = torchfile.load(file)
-
     ids = info[b'ids']
 
     imids = []
     for i,id in enumerate(ids):
         imids.append(''.join(chr(i) for i in id))
-
     st_vecs = {}
-    st_vecs['encs'] = info['encs']
-    st_vecs['rlens'] = info['rlens']
-    st_vecs['rbps'] = info['rbps']
+    st_vecs['encs'] = info[b'encs']
+    st_vecs['rlens'] = info[b'rlens']
+    st_vecs['rbps'] = info[b'rbps']
     st_vecs['ids'] = imids
 
     print(np.shape(st_vecs['encs']),len(st_vecs['rlens']),len(st_vecs['rbps']),len(st_vecs['ids']))
@@ -68,6 +66,7 @@ print('Loading dataset.')
 # print DATASET
 dataset = utils.Layer.merge([utils.Layer.L1, utils.Layer.L2, utils.Layer.INGRS],DATASET)
 print('Loading ingr vocab.')
+print(opts.vocab) #Jan test comment
 with open(opts.vocab) as f_vocab:
     ingr_vocab = {w.rstrip(): i+2 for i, w in enumerate(f_vocab)} # +1 for lua
     ingr_vocab['</i>'] = 1
